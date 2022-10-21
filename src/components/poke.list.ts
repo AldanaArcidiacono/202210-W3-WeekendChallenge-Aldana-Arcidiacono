@@ -1,24 +1,31 @@
 import { IPoke } from '../model/poke.js';
-//import { PokeApi } from '../services/poke.api.js';
+import { PokeApi } from '../services/poke.api.js';
 import { Component } from './components.js';
 
 export class PokeList extends Component {
   template: string;
-  poke: Array<IPoke>;
-  // api: PokeApi;
+  pokes: any;
+  api: PokeApi;
   constructor(public selector: string) {
     super();
-    // this.api = new PokeApi();
+    this.api = new PokeApi();
+    this.pokes = '';
+    this.startPokes();
   }
-  async startTasks() {
-    // this.poke = await this.api.getPoke();
+  async startPokes() {
+    this.pokes = await this.api.getPoke();
     this.manageComponent();
   }
   manageComponent() {
+    console.log(this.pokes);
     this.template = this.createTemplate();
     this.render(this.selector, this.template);
   }
   createTemplate() {
-    return ``;
+    this.template = ``;
+    this.pokes.results.forEach((pokemon: any) => {
+      this.template += `<h1>${pokemon.name}</h1>`;
+    });
+    return this.template;
   }
 }

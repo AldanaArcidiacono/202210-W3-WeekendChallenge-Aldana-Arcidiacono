@@ -7,26 +7,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-//import { PokeApi } from '../services/poke.api.js';
+import { PokeApi } from '../services/poke.api.js';
 import { Component } from './components.js';
 export class PokeList extends Component {
-    // api: PokeApi;
     constructor(selector) {
         super();
         this.selector = selector;
-        // this.api = new PokeApi();
+        this.api = new PokeApi();
+        this.pokes = '';
+        this.startPokes();
     }
-    startTasks() {
+    startPokes() {
         return __awaiter(this, void 0, void 0, function* () {
-            // this.poke = await this.api.getPoke();
+            this.pokes = yield this.api.getPoke();
             this.manageComponent();
         });
     }
     manageComponent() {
+        console.log(this.pokes);
         this.template = this.createTemplate();
         this.render(this.selector, this.template);
     }
     createTemplate() {
-        return ``;
+        this.template = ``;
+        this.pokes.results.forEach((pokemon) => {
+            this.template += `<h1>${pokemon.name}</h1>`;
+        });
+        return this.template;
     }
 }
