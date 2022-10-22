@@ -7,9 +7,6 @@ export class Main extends Component {
         this.renderAdd(this.selector, this.template);
     }
     createTemplate() {
-        return `
-            <main>
-            </main>
-        `;
+        return `<main></main>`;
     }
 }

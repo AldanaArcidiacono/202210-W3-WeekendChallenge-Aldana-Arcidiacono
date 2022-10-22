@@ -30,7 +30,6 @@ export class PokeList extends Component {
         });
     }
     manageComponent() {
-        console.log(this.pokes);
         this.template = this.createTemplate();
         this.render(this.selector, this.template);
     }

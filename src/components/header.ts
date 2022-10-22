@@ -10,9 +10,11 @@ export class Header extends Component {
   }
   createTemplate() {
     return `
-         <header>
+        <header>
+          <div>
             <h1>PokeApi</h1>
-              <img class="pokes-img" src="../assets/pokemon-logo.svg" alt="Pokemon Logo">
+            <img class="pokes-img" src="../assets/pokemon-logo.svg" alt="Pokemon Logo">
+          </div>
         </header>
         `;
   }

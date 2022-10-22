@@ -1,4 +1,3 @@
-import { IPoke } from '../model/poke.js';
 import { PokeApi } from '../services/poke.api.js';
 import { Component } from './components.js';
 
@@ -29,7 +28,6 @@ export class PokeList extends Component {
     this.manageComponent();
   }
   manageComponent() {
-    console.log(this.pokes);
     this.template = this.createTemplate();
     this.render(this.selector, this.template);
   }
