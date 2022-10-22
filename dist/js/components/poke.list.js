@@ -15,7 +15,7 @@ export class PokeList extends Component {
         this.selector = selector;
         this.api = new PokeApi();
         this.pokes = '';
-        this.pokesInfo = '';
+        this.pokesInfo = [];
         this.startPokes();
     }
     startPokes() {
@@ -25,17 +25,29 @@ export class PokeList extends Component {
             this.pokes.results.forEach((item) => {
                 pokesArr.push(item.url);
             });
-            this.pokesInfo = yield Promise.all(pokesArr.map((url) => fetch(url).then((response) => response.json())));
+            this.pokesInfo = yield Promise.all(pokesArr.map((url) => fetch(url).then((result) => result.json())));
+            this.nextPageInfo = yield this.api.getNextPage(this.pokes.next);
+            const nextPokeArr = [];
+            this.nextPageInfo.results.forEach((item) => {
+                nextPokeArr.push(item.url);
+            });
+            this.nextPagePokes = yield Promise.all(nextPokeArr.map((url) => fetch(url).then((result) => result.json())));
             this.manageComponent();
         });
     }
     manageComponent() {
-        this.template = this.createTemplate();
-        this.render(this.selector, this.template);
+        var _a;
+        this.template = this.createTemplate(this.pokesInfo);
+        this.renderAdd(this.selector, this.template);
+        (_a = document.querySelector('.next-button')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
+            console.log(this.nextPagePokes);
+            this.template = this.createTemplate(this.nextPagePokes);
+            this.render(this.selector, this.template);
+        });
     }
-    createTemplate() {
+    createTemplate(array) {
         this.template = `<div class="pokes-container">`;
-        this.pokesInfo.forEach((item) => {
+        array.forEach((item) => {
             this.template += `
       <div>
         <h2 class="pokes-name">${item.species.name}</h2>
