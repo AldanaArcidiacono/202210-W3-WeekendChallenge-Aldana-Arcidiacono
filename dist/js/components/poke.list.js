@@ -30,7 +30,6 @@ export class PokeList extends Component {
         });
     }
     manageComponent() {
-        console.log(this.pokes);
         this.template = this.createTemplate();
         this.render(this.selector, this.template);
     }
@@ -39,7 +38,7 @@ export class PokeList extends Component {
         this.pokesInfo.forEach((item) => {
             this.template += `
       <div class="pokes-container">
-        <h1 class="pokes-name">${item.species.name}</h1>
+        <h2 class="pokes-name">${item.species.name}</h2>
         <img class="pokes-img" src="${item.sprites.other.dream_world.front_default}" alt="${item.species.name}">
       </div>`;
         });

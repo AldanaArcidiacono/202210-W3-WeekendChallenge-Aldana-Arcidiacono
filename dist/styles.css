@@ -1,5 +1,34 @@
-/* .pokes-container {}
+* {
+  box-sizing: border-box;
+}
 
-.pokes-name {}
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 
-.pokes-img {} */
+header, footer {
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 0;
+  color: white;
+}
+
+main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4rem;
+  padding: 1rem;
+}
+
+div img {
+  max-height: 200px;
+  min-height: 200px;
+}

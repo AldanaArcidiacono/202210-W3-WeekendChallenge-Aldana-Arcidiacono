@@ -1,4 +1,3 @@
-import { IPoke } from '../model/poke.js';
 import { PokeApi } from '../services/poke.api.js';
 import { Component } from './components.js';
 
@@ -29,7 +28,6 @@ export class PokeList extends Component {
     this.manageComponent();
   }
   manageComponent() {
-    console.log(this.pokes);
     this.template = this.createTemplate();
     this.render(this.selector, this.template);
   }
@@ -38,7 +36,7 @@ export class PokeList extends Component {
     this.pokesInfo.forEach((item: any) => {
       this.template += `
       <div class="pokes-container">
-        <h1 class="pokes-name">${item.species.name}</h1>
+        <h2 class="pokes-name">${item.species.name}</h2>
         <img class="pokes-img" src="${item.sprites.other.dream_world.front_default}" alt="${item.species.name}">
       </div>`;
     });
