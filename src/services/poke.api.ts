@@ -1,3 +1,4 @@
+import { Component } from '../components/components.js';
 import { IPoke } from '../model/poke.js';
 
 export class PokeApi {
@@ -7,5 +8,8 @@ export class PokeApi {
   }
   getPoke(): Promise<Array<IPoke>> {
     return fetch(this.url).then((response) => response.json());
+  }
+  getNextPage(nextUrl: string): Promise<Array<IPoke>> {
+    return fetch(nextUrl).then((response) => response.json());
   }
 }
