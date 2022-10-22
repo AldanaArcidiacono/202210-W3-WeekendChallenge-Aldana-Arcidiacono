@@ -1,4 +1,8 @@
-// import { getAllPokemons } from './services/poke.api.js';
-// console.log(getAllPokemons());
+import { Footer } from './components/footer.js';
+import { Header } from './components/header.js';
+import { Main } from './components/main.js';
 import { PokeList } from './components/poke.list.js';
-new PokeList('body');
+new Header('body');
+new Main('body');
+new PokeList('main');
+new Footer('body');
