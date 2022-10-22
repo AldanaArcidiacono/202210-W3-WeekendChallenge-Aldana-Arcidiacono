@@ -16,9 +16,11 @@ export class PokeList extends Component {
   async startPokes() {
     this.pokes = await this.api.getPoke();
     const pokesArr: any = [];
+
     this.pokes.results.forEach((item: any) => {
       pokesArr.push(item.url);
     });
+
     this.pokesInfo = await Promise.all(
       pokesArr.map((url: string) =>
         fetch(url).then((response) => response.json())
@@ -32,14 +34,19 @@ export class PokeList extends Component {
     this.render(this.selector, this.template);
   }
   createTemplate() {
-    this.template = ``;
+    this.template = `<div class="pokes-container">`;
     this.pokesInfo.forEach((item: any) => {
       this.template += `
-      <div class="pokes-container">
+      <div>
         <h2 class="pokes-name">${item.species.name}</h2>
         <img class="pokes-img" src="${item.sprites.other.dream_world.front_default}" alt="${item.species.name}">
       </div>`;
     });
+    this.template += `</div>
+    <div class="page-buttons">
+      <button class="previous-button">Anterior</button>
+      <button class="next-button">Siguiente</button>
+    </div>`;
     return this.template;
   }
 }
