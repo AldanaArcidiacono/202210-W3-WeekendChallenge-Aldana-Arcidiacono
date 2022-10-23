@@ -16,10 +16,10 @@ export class PokeList extends Component {
         this.api = new PokeApi();
         this.pokes = '';
         this.pokesInfo = [];
-        this.nextPagePokes = [];
-        this.nextPageInfo = '';
-        this.previousPagePokes = [];
-        this.previousPageInfo = '';
+        this.nextInfo = [];
+        this.nextPokes = '';
+        this.previousInfo = [];
+        this.previousPokes = '';
         this.startInitialFetch();
     }
     startInitialFetch() {
@@ -38,56 +38,52 @@ export class PokeList extends Component {
     /// -----------NEXT
     nextPageFetch() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.nextPageInfo = yield this.api.getNextPage(this.pokes.next);
+            this.nextPokes = yield this.api.getNextPage(this.pokes.next);
             const nextPokeArr = [];
-            this.nextPageInfo.results.forEach((item) => {
+            this.nextPokes.results.forEach((item) => {
                 nextPokeArr.push(item.url);
             });
-            this.nextPagePokes = yield Promise.all(nextPokeArr.map((url) => fetch(url).then((result) => result.json())));
+            this.nextInfo = yield Promise.all(nextPokeArr.map((url) => fetch(url).then((result) => result.json())));
         });
     }
     /// -----------PREVIOUS
     previousPageFetch() {
         return __awaiter(this, void 0, void 0, function* () {
-            this.previousPageInfo = yield this.api.getPreviousPage(this.pokes.previous);
+            this.previousPokes = yield this.api.getPreviousPage(this.pokes.previous);
             const previousPokeArr = [];
-            this.previousPageInfo.results.forEach((item) => {
+            this.previousPokes.results.forEach((item) => {
                 previousPokeArr.push(item.url);
             });
-            this.previousPagePokes = yield Promise.all(previousPokeArr.map((url) => fetch(url).then((result) => result.json())));
+            this.previousInfo = yield Promise.all(previousPokeArr.map((url) => fetch(url).then((result) => result.json())));
         });
     }
-    //this.manageComponent();
-    manageComponent() {
+    //manageComponent() {
+    manageComponent(array = this.pokesInfo) {
         var _a, _b;
-        //manageComponent(array = this.pokesInfo) {
-        //this.template = this.createTemplate(array);
-        this.template = this.createTemplate(this.pokesInfo);
+        this.template = this.createTemplate();
         this.render(this.selector, this.template);
         (_a = document.querySelector('.next-button')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
-            this.template = this.createTemplate(this.nextPagePokes);
-            this.render(this.selector, this.template);
-            // this.pokes = this.nextPagePokes;
-            // this.pokesInfo = this.nextPageInfo;
-            // this.nextPageFetch();
-            // this.previousPageFetch();
-            // this.manageComponent();
+            this.pokes = this.nextPokes;
+            this.pokesInfo = this.nextInfo;
+            this.nextPageFetch();
+            this.previousPageFetch();
+            this.manageComponent();
         });
         (_b = document
             .querySelector('.previous-button')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
             console.log('first');
-            this.template = this.createTemplate(this.previousPagePokes);
-            this.render(this.selector, this.template);
-            // this.pokes = this.previousPagePokes;
-            // this.pokesInfo = this.previousPageInfo;
-            // this.nextPageFetch();
-            // this.previousPageFetch();
-            // this.manageComponent();
+            // this.template = this.createTemplate(this.previousPagePokes);
+            // this.render(this.selector, this.template);
+            this.pokes = this.previousPokes;
+            this.pokesInfo = this.previousInfo;
+            this.nextPageFetch();
+            this.previousPageFetch();
+            this.manageComponent();
         });
     }
-    createTemplate(array) {
+    createTemplate() {
         this.template = `<div class="pokes-container">`;
-        array.forEach((item) => {
+        this.pokesInfo.forEach((item) => {
             this.template += `
       <div class="poke-card">
         <h2 class="pokes-name">${item.species.name}</h2>

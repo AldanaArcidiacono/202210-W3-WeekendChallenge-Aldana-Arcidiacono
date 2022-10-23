@@ -6,19 +6,19 @@ export class PokeList extends Component {
   pokes: any;
   api: PokeApi;
   pokesInfo: Array<string>;
-  nextPagePokes: any;
-  nextPageInfo: any;
-  previousPagePokes: any;
-  previousPageInfo: any;
+  nextInfo: any;
+  nextPokes: any;
+  previousInfo: any;
+  previousPokes: any;
   constructor(public selector: string) {
     super();
     this.api = new PokeApi();
     this.pokes = '';
     this.pokesInfo = [];
-    this.nextPagePokes = [];
-    this.nextPageInfo = '';
-    this.previousPagePokes = [];
-    this.previousPageInfo = '';
+    this.nextInfo = [];
+    this.nextPokes = '';
+    this.previousInfo = [];
+    this.previousPokes = '';
     this.startInitialFetch();
   }
 
@@ -42,14 +42,14 @@ export class PokeList extends Component {
   /// -----------NEXT
 
   async nextPageFetch() {
-    this.nextPageInfo = await this.api.getNextPage(this.pokes.next);
+    this.nextPokes = await this.api.getNextPage(this.pokes.next);
 
     const nextPokeArr: Array<string> = [];
-    this.nextPageInfo.results.forEach((item: any) => {
+    this.nextPokes.results.forEach((item: any) => {
       nextPokeArr.push(item.url);
     });
 
-    this.nextPagePokes = await Promise.all(
+    this.nextInfo = await Promise.all(
       nextPokeArr.map((url: string) =>
         fetch(url).then((result) => result.json())
       )
@@ -59,55 +59,50 @@ export class PokeList extends Component {
   /// -----------PREVIOUS
 
   async previousPageFetch() {
-    this.previousPageInfo = await this.api.getPreviousPage(this.pokes.previous);
+    this.previousPokes = await this.api.getPreviousPage(this.pokes.previous);
     const previousPokeArr: Array<string> = [];
 
-    this.previousPageInfo.results.forEach((item: any) => {
+    this.previousPokes.results.forEach((item: any) => {
       previousPokeArr.push(item.url);
     });
 
-    this.previousPagePokes = await Promise.all(
+    this.previousInfo = await Promise.all(
       previousPokeArr.map((url: string) =>
         fetch(url).then((result) => result.json())
       )
     );
   }
 
-  //this.manageComponent();
-
-  manageComponent() {
-    //manageComponent(array = this.pokesInfo) {
-    //this.template = this.createTemplate(array);
-    this.template = this.createTemplate(this.pokesInfo);
+  //manageComponent() {
+  manageComponent(array = this.pokesInfo) {
+    this.template = this.createTemplate();
     this.render(this.selector, this.template);
 
     document.querySelector('.next-button')?.addEventListener('click', () => {
-      this.template = this.createTemplate(this.nextPagePokes);
-      this.render(this.selector, this.template);
-      // this.pokes = this.nextPagePokes;
-      // this.pokesInfo = this.nextPageInfo;
-      // this.nextPageFetch();
-      // this.previousPageFetch();
-      // this.manageComponent();
+      this.pokes = this.nextPokes;
+      this.pokesInfo = this.nextInfo;
+      this.nextPageFetch();
+      this.previousPageFetch();
+      this.manageComponent();
     });
 
     document
       .querySelector('.previous-button')
       ?.addEventListener('click', () => {
         console.log('first');
-        this.template = this.createTemplate(this.previousPagePokes);
-        this.render(this.selector, this.template);
-        // this.pokes = this.previousPagePokes;
-        // this.pokesInfo = this.previousPageInfo;
-        // this.nextPageFetch();
-        // this.previousPageFetch();
-        // this.manageComponent();
+        // this.template = this.createTemplate(this.previousPagePokes);
+        // this.render(this.selector, this.template);
+        this.pokes = this.previousPokes;
+        this.pokesInfo = this.previousInfo;
+        this.nextPageFetch();
+        this.previousPageFetch();
+        this.manageComponent();
       });
   }
 
-  createTemplate(array: Array<string>) {
+  createTemplate() {
     this.template = `<div class="pokes-container">`;
-    array.forEach((item: any) => {
+    this.pokesInfo.forEach((item: any) => {
       this.template += `
       <div class="poke-card">
         <h2 class="pokes-name">${item.species.name}</h2>
