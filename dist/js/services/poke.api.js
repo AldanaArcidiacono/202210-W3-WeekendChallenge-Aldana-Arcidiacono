@@ -8,4 +8,9 @@ export class PokeApi {
     getNextPage(nextUrl) {
         return fetch(nextUrl).then((response) => response.json());
     }
+    getPreviousPage(previousUrl) {
+        if (!previousUrl)
+            return this.getPoke();
+        return fetch(previousUrl).then((response) => response.json());
+    }
 }

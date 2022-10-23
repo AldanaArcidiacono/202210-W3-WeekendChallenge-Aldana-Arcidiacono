@@ -16,9 +16,13 @@ export class PokeList extends Component {
         this.api = new PokeApi();
         this.pokes = '';
         this.pokesInfo = [];
-        this.startPokes();
+        this.nextInfo = [];
+        this.nextPokes = '';
+        this.previousInfo = [];
+        this.previousPokes = '';
+        this.startInitialFetch();
     }
-    startPokes() {
+    startInitialFetch() {
         return __awaiter(this, void 0, void 0, function* () {
             this.pokes = yield this.api.getPoke();
             const pokesArr = [];
@@ -26,32 +30,64 @@ export class PokeList extends Component {
                 pokesArr.push(item.url);
             });
             this.pokesInfo = yield Promise.all(pokesArr.map((url) => fetch(url).then((result) => result.json())));
-            this.nextPageInfo = yield this.api.getNextPage(this.pokes.next);
-            const nextPokeArr = [];
-            this.nextPageInfo.results.forEach((item) => {
-                nextPokeArr.push(item.url);
-            });
-            this.nextPagePokes = yield Promise.all(nextPokeArr.map((url) => fetch(url).then((result) => result.json())));
+            this.nextPageFetch();
+            this.previousPageFetch();
             this.manageComponent();
         });
     }
-    manageComponent() {
-        var _a;
-        this.template = this.createTemplate(this.pokesInfo);
-        this.renderAdd(this.selector, this.template);
-        (_a = document.querySelector('.next-button')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
-            console.log(this.nextPagePokes);
-            this.template = this.createTemplate(this.nextPagePokes);
-            this.render(this.selector, this.template);
+    /// -----------NEXT
+    nextPageFetch() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.nextPokes = yield this.api.getNextPage(this.pokes.next);
+            const nextPokeArr = [];
+            this.nextPokes.results.forEach((item) => {
+                nextPokeArr.push(item.url);
+            });
+            this.nextInfo = yield Promise.all(nextPokeArr.map((url) => fetch(url).then((result) => result.json())));
         });
     }
-    createTemplate(array) {
+    /// -----------PREVIOUS
+    previousPageFetch() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.previousPokes = yield this.api.getPreviousPage(this.pokes.previous);
+            const previousPokeArr = [];
+            this.previousPokes.results.forEach((item) => {
+                previousPokeArr.push(item.url);
+            });
+            this.previousInfo = yield Promise.all(previousPokeArr.map((url) => fetch(url).then((result) => result.json())));
+        });
+    }
+    //manageComponent() {
+    manageComponent(array = this.pokesInfo) {
+        var _a, _b;
+        this.template = this.createTemplate();
+        this.render(this.selector, this.template);
+        (_a = document.querySelector('.next-button')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
+            this.pokes = this.nextPokes;
+            this.pokesInfo = this.nextInfo;
+            this.nextPageFetch();
+            this.previousPageFetch();
+            this.manageComponent();
+        });
+        (_b = document
+            .querySelector('.previous-button')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
+            console.log('first');
+            // this.template = this.createTemplate(this.previousPagePokes);
+            // this.render(this.selector, this.template);
+            this.pokes = this.previousPokes;
+            this.pokesInfo = this.previousInfo;
+            this.nextPageFetch();
+            this.previousPageFetch();
+            this.manageComponent();
+        });
+    }
+    createTemplate() {
         this.template = `<div class="pokes-container">`;
-        array.forEach((item) => {
+        this.pokesInfo.forEach((item) => {
             this.template += `
-      <div>
+      <div class="poke-card">
         <h2 class="pokes-name">${item.species.name}</h2>
-        <img class="pokes-img" src="${item.sprites.other.dream_world.front_default}" alt="${item.species.name}">
+        <img class="pokes-img" src="${item.sprites.other.dream_world.front_default}" alt="${item.species.name}" width="300">
       </div>`;
         });
         this.template += `</div>
