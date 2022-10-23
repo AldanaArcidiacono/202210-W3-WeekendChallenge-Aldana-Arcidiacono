@@ -26,6 +26,7 @@ export class PokeList extends Component {
         return __awaiter(this, void 0, void 0, function* () {
             this.pokes = yield this.api.getPoke();
             const pokesArr = [];
+            console.log('POKES', this.pokes);
             this.pokes.results.forEach((item) => {
                 pokesArr.push(item.url);
             });
@@ -35,7 +36,6 @@ export class PokeList extends Component {
             this.manageComponent();
         });
     }
-    /// -----------NEXT
     nextPageFetch() {
         return __awaiter(this, void 0, void 0, function* () {
             this.nextPokes = yield this.api.getNextPage(this.pokes.next);
@@ -44,9 +44,10 @@ export class PokeList extends Component {
                 nextPokeArr.push(item.url);
             });
             this.nextInfo = yield Promise.all(nextPokeArr.map((url) => fetch(url).then((result) => result.json())));
+            console.log('NEXTINFO', this.nextInfo);
+            console.log('NEXTPOKES', this.nextPokes);
         });
     }
-    /// -----------PREVIOUS
     previousPageFetch() {
         return __awaiter(this, void 0, void 0, function* () {
             this.previousPokes = yield this.api.getPreviousPage(this.pokes.previous);
@@ -57,8 +58,7 @@ export class PokeList extends Component {
             this.previousInfo = yield Promise.all(previousPokeArr.map((url) => fetch(url).then((result) => result.json())));
         });
     }
-    //manageComponent() {
-    manageComponent(array = this.pokesInfo) {
+    manageComponent() {
         var _a, _b;
         this.template = this.createTemplate();
         this.render(this.selector, this.template);
@@ -71,9 +71,6 @@ export class PokeList extends Component {
         });
         (_b = document
             .querySelector('.previous-button')) === null || _b === void 0 ? void 0 : _b.addEventListener('click', () => {
-            console.log('first');
-            // this.template = this.createTemplate(this.previousPagePokes);
-            // this.render(this.selector, this.template);
             this.pokes = this.previousPokes;
             this.pokesInfo = this.previousInfo;
             this.nextPageFetch();
@@ -84,6 +81,7 @@ export class PokeList extends Component {
     createTemplate() {
         this.template = `<div class="pokes-container">`;
         this.pokesInfo.forEach((item) => {
+            console.log('ITEM', item);
             this.template += `
       <div class="poke-card">
         <h2 class="pokes-name">${item.species.name}</h2>
