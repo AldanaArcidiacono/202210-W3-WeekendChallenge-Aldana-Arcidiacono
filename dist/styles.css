@@ -4,6 +4,7 @@
 
 body {
   margin: 0;
+  max-height: 100vh;
 }
 
 header, footer {
@@ -14,9 +15,6 @@ header, footer {
   height: 175px;
 }
 
-header img {
-  width: 420px;
-}
 
 h1 {
   font-size: 0;
@@ -27,14 +25,28 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 3rem;
   padding: 1.5rem;
+}
+
+.poke-card {
+  margin: 1.5rem;
+  padding: 3rem;
+  border: 1px #f1e151 solid;
+  box-shadow: 2px 2px 10px #f1e151;
+  max-width: 300px;
+  border-radius: 15px;
 }
 
 div img {
   max-height: 250px;
   min-height: 250px;
+  max-width: 200px;
 }
+
+#logo-img {
+  max-width: 380px;
+}
+
 
 div h2 {
   display: flex;

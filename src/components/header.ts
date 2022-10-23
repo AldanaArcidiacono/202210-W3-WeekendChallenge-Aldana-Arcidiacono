@@ -13,7 +13,7 @@ export class Header extends Component {
         <header>
           <div>
             <h1>PokeApi</h1>
-            <img src="../assets/pokemon-logo.svg" alt="Pokemon Logo">
+            <img src="../assets/pokemon-logo.svg" alt="Pokemon Logo" id="logo-img">
           </div>
         </header>
         `;
