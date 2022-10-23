@@ -40,7 +40,6 @@ export class PokeList extends Component {
         this.template = this.createTemplate(this.pokesInfo);
         this.renderAdd(this.selector, this.template);
         (_a = document.querySelector('.next-button')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
-            console.log(this.nextPagePokes);
             this.template = this.createTemplate(this.nextPagePokes);
             this.render(this.selector, this.template);
         });

@@ -11,6 +11,11 @@ header, footer {
   flex: 1 0 auto;
   justify-content: space-around;
   align-items: center;
+  height: 175px;
+}
+
+header img {
+  width: 420px;
 }
 
 h1 {
