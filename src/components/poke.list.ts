@@ -15,10 +15,10 @@ export class PokeList extends Component {
     this.api = new PokeApi();
     this.pokes = '';
     this.pokesInfo = [];
-    this.nextPagePokes = '';
-    this.nextPageInfo = [];
-    this.previousPagePokes = '';
-    this.previousPageInfo = [];
+    this.nextPagePokes = [];
+    this.nextPageInfo = '';
+    this.previousPagePokes = [];
+    this.previousPageInfo = '';
     this.startInitialFetch();
   }
 
@@ -34,14 +34,14 @@ export class PokeList extends Component {
       pokesArr.map((url: string) => fetch(url).then((result) => result.json()))
     );
 
-    // this.nextPageInfo();
-    // this.previousPageFetch();
-    //this.manageComponent();
-    // }
+    this.nextPageFetch();
+    this.previousPageFetch();
+    this.manageComponent();
+  }
 
-    /// -----------NEXT
+  /// -----------NEXT
 
-    // async nextPageFetch() {
+  async nextPageFetch() {
     this.nextPageInfo = await this.api.getNextPage(this.pokes.next);
 
     const nextPokeArr: Array<string> = [];
@@ -54,13 +54,11 @@ export class PokeList extends Component {
         fetch(url).then((result) => result.json())
       )
     );
-    //this.manageComponent();
-    //}
+  }
 
-    /// -----------PREVIOUS
+  /// -----------PREVIOUS
 
-    //async previousPageFetch() {
-    //if (this.pokes.previous !== null) {
+  async previousPageFetch() {
     this.previousPageInfo = await this.api.getPreviousPage(this.pokes.previous);
     const previousPokeArr: Array<string> = [];
 
@@ -73,10 +71,9 @@ export class PokeList extends Component {
         fetch(url).then((result) => result.json())
       )
     );
-    //}
-
-    this.manageComponent();
   }
+
+  //this.manageComponent();
 
   manageComponent() {
     //manageComponent(array = this.pokesInfo) {
@@ -85,12 +82,11 @@ export class PokeList extends Component {
     this.render(this.selector, this.template);
 
     document.querySelector('.next-button')?.addEventListener('click', () => {
-      //this.template = this.createTemplate(array);
       this.template = this.createTemplate(this.nextPagePokes);
       this.render(this.selector, this.template);
       // this.pokes = this.nextPagePokes;
       // this.pokesInfo = this.nextPageInfo;
-      // this.nextPageInfo();
+      // this.nextPageFetch();
       // this.previousPageFetch();
       // this.manageComponent();
     });
@@ -99,12 +95,11 @@ export class PokeList extends Component {
       .querySelector('.previous-button')
       ?.addEventListener('click', () => {
         console.log('first');
-        //this.template = this.createTemplate(array);
         this.template = this.createTemplate(this.previousPagePokes);
         this.render(this.selector, this.template);
         // this.pokes = this.previousPagePokes;
         // this.pokesInfo = this.previousPageInfo;
-        // this.nextPageInfo();
+        // this.nextPageFetch();
         // this.previousPageFetch();
         // this.manageComponent();
       });
